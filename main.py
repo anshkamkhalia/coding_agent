@@ -36,4 +36,3 @@ def main():
 
     print(response.text)
 
-print(run_python_file('./', 'input_test.py'))
