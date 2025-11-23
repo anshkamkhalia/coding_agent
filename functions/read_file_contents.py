@@ -1,4 +1,5 @@
 import os
+from google.genai import types
 
 MAX_CHARS = 10000 # to prevent overusing token limits
 
@@ -25,3 +26,24 @@ def read_file_contents(working_directory: str, filepath: str) -> str:
         return f"exception {Exception} occured when attempting to read the contents of {abs_filepath}"
 
     return contents
+
+# schema
+read_file_contents_schema = types.FunctionDeclaration(
+    name='read_file_contents',
+    description='Reads the contents of a specified file.',
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "working_directory": types.Schema(
+                type=types.Type.STRING,
+                description="The base working directory. The function restricts access to files within this directory."
+            ),
+            "filepath": types.Schema(
+                type=types.Type.STRING,
+                description="The relative filepath to the file desired to display the contents of.",
+                nullable=False
+            )
+        },
+        required=["working_directory", "filepath"]
+    )
+)

@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+from google.genai import types
 
 def run_python_file(working_directory: str, filepath: str) -> dict:
 
@@ -36,3 +37,24 @@ def run_python_file(working_directory: str, filepath: str) -> dict:
         }
     except Exception as e:
         return {'error': f'error while executing {filepath}: {e}'}
+
+# schema
+run_python_file_schema = types.FunctionDeclaration(
+    name='run_python_file',
+    description='Executes the specified python script',
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "working_directory": types.Schema(
+                type=types.Type.STRING,
+                description="The base working directory. The function restricts access to files within this directory."
+            ),
+            "filepath": types.Schema(
+                type=types.Type.STRING,
+                description="The relative path to the file that should be executed.",
+                nullable=False
+            )
+        },
+        required=["working_directory", "filepath"]
+    )
+)

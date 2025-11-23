@@ -1,4 +1,5 @@
 import os
+from google.genai import types
 
 def get_files_info(working_directory: str, directory: str=None) -> dict:
 
@@ -27,3 +28,23 @@ def get_files_info(working_directory: str, directory: str=None) -> dict:
 
     return return_dict
 
+# schema
+get_files_info_schema = types.FunctionDeclaration(
+    name='get_files_info',
+    description='Lists the contents of a specified directory along with their sizes.',
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "working_directory": types.Schema(
+                type=types.Type.STRING,
+                description="The base working directory. The function restricts access to files within this directory."
+            ),
+            "directory": types.Schema(
+                type=types.Type.STRING,
+                description="Optional subdirectory within the working directory to list. If omitted, defaults to the working directory.",
+                nullable=True
+            )
+        },
+        required=["working_directory"]
+    )
+)

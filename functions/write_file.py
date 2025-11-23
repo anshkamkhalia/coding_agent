@@ -1,6 +1,7 @@
 import os
+from google.genai import types
 
-MAX_CHARS = 10000 # to prevent overusing token limits
+MAX_CHARS = 20000 # to prevent overusing token limits
 
 def write_file(working_directory: str, filepath: str, content: str) -> str:
 
@@ -23,3 +24,28 @@ def write_file(working_directory: str, filepath: str, content: str) -> str:
             return f''
     except Exception as e:
         return f'exception {Exception} occured when attempting to write to file'
+    
+# schema
+write_file_schema = types.FunctionDeclaration(
+    name='write_file',
+    description='Overwrites the previous contents of a specified file with new content',
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "working_directory": types.Schema(
+                type=types.Type.STRING,
+                description="The base working directory. The function restricts access to files within this directory."
+            ),
+            "filepath": types.Schema(
+                type=types.Type.STRING,
+                description="Relative filepath to the file that should have its contents overwritten.",
+                nullable=False
+            ),
+            "content": types.Schema(
+                type=types.Type.STRING,
+                description="The content that will be written into the given file."
+            )
+        },
+        required=["working_directory", "filepath", "content"]
+    )
+)
