@@ -11,12 +11,18 @@ from functions.read_file_contents import read_file_contents
 from functions.write_file import write_file
 from functions.run_python_file import run_python_file
 from functions.call_function import execute_function_call
+from functions.create_file import create_file
+from functions.delete_file import delete_file
+from functions.install_dependencies import install_dependencies
 
 # import schemas
 from functions.get_files_info import get_files_info_schema
 from functions.read_file_contents import read_file_contents_schema
 from functions.write_file import write_file_schema
 from functions.run_python_file import run_python_file_schema
+from functions.create_file import create_file_schema
+from functions.delete_file import delete_file_schema
+from functions.install_dependencies import install_dependencies_schema
 
 def main():
 
@@ -43,6 +49,9 @@ def main():
             write_file_schema,
             read_file_contents_schema,
             run_python_file_schema,
+            create_file_schema,
+            delete_file_schema,
+            install_dependencies_schema,
         ]
     )
 
@@ -52,8 +61,10 @@ def main():
         "write_file": write_file,
         "read_file_contents": read_file_contents,
         "run_python_file": run_python_file,
+        "create_file": create_file,
+        "delete_file": delete_file,
+        "install_dependencies": install_dependencies,
     }
-
 
     # create a system prompt
     SYSTEM_PROMPT = (
@@ -64,8 +75,10 @@ def main():
     f"2. write_file(working_directory, filepath, content) -> writes to a file\n"
     f"3. read_file_contents(working_directory, filepath) -> reads a file\n"
     f"4. run_python_file(working_directory, filepath) -> executes a python file\n"
+    f"5. create_file(working_directory, filepath, content) -> creates a python file\n"
+    f"6. delete_file(working_directory, filepath) -> deletes a python file, USE EXTREMELY CAUTIOUSLY\n"
+    f"7. install_dependencies(packages) -> Installs a python package in the virtual environment\n"
 )
-
 
     # create config
     config = types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT, # pass sys prompt
@@ -95,7 +108,7 @@ def main():
 
                 messages.append(
                     types.Content(
-                        role="assistant",
+                        role="model",
                         parts=parts
                     )
                 )
